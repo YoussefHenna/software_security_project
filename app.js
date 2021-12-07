@@ -256,5 +256,4 @@ client.connect((err) => {
   });
 
   app.listen(process.env.PORT);
-  console.log("Server is listening  http://localhost:" + process.env.PORT);
 });
