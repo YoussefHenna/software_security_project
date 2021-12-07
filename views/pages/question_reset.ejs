@@ -14,14 +14,26 @@
   <body>
     <div class="container">
       <div class="row">
-        <h2 class="col s12">Login</h2>
+        <h2 class="col s12">Reset password</h2>
+      </div>
+      <div class="row">
+        <h5 class="col s12">
+          To reset password, answer the security question and enter new password
+        </h5>
+      </div>
+      <div class="row">
+        <h6 class="col s12"><%= question %></h6>
       </div>
 
-      <form class="row" method="post" action="/auth/login">
+      <form class="row" method="post" action="/auth/reset_password">
         <div class="input-field row">
-          <i class="material-icons prefix">account_circle</i>
-          <input id="username" name="username" type="text" class="validate" />
-          <label for="username">Username</label>
+          <input
+            id="answer"
+            name="security_answer"
+            type="text"
+            class="validate"
+          />
+          <label for="answer">Answer</label>
         </div>
         <div class="input-field row">
           <i class="material-icons prefix">password</i>
@@ -31,24 +43,14 @@
             type="password"
             class="validate"
           />
-          <label for="password">Password</label>
+          <label for="password">New Password</label>
         </div>
+        <input type="hidden" name="username" value="<%=username%>" />
 
         <button type="submit" class="waves-effect waves-light btn row">
-          Login
+          Set password
         </button>
       </form>
-
-      <a class="row" class="waves-effect waves-light btn row" href="/register">
-        Register instead
-      </a>
-      <a
-        class="row"
-        class="waves-effect waves-light btn row"
-        href="/forgot_password"
-      >
-        Forgot password?
-      </a>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

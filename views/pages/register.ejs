@@ -14,7 +14,7 @@
   <body>
     <div class="container">
       <div class="row">
-        <h2 class="col s1">Register</h2>
+        <h2 class="col s12">Register</h2>
       </div>
 
       <form class="row" method="post" action="/auth/register">
@@ -32,6 +32,31 @@
             class="validate"
           />
           <label for="password">Password</label>
+        </div>
+        <div class="input-field row">
+          <select
+            id="question"
+            name="security_question"
+            class="browser-default"
+          >
+            <option value="" disabled selected>Select security question</option>
+            <option>What is the name of your favorite pet?</option>
+            <option>What is your mother's maiden name?</option>
+            <option>What high school did you attend?</option>
+            <option>What is the name of your first school?</option>
+            <option>What was the make of your first car?</option>
+            <option>What was your favorite food as a child?</option>
+            <option>Where did you meet your spouse?</option>
+          </select>
+        </div>
+        <div class="input-field row">
+          <input
+            id="answer"
+            name="security_answer"
+            type="text"
+            class="validate"
+          />
+          <label for="answer">Answer</label>
         </div>
 
         <button type="submit" class="waves-effect waves-light btn row">
