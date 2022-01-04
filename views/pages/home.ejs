@@ -9,16 +9,15 @@
     href="https://fonts.googleapis.com/icon?family=Material+Icons"
     rel="stylesheet"
   />
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
 </head>
+
 <html>
   <body>
     <div class="container">
       <div class="row">
         <h2 class="col">TV Shows</h2>
-        <a
-          style="margin-top: 50px; margin-left: 50px"
-          class="waves-effect waves-light btn col red"
-          onclick="document.getElementById('sign_out').submit()"
+        <a id="sign-out-btn" class="waves-effect waves-light btn col red"
           >Sign Out</a
         >
       </div>
@@ -52,6 +51,7 @@
           />
           <label for="image_url">Image URL</label>
         </div>
+        <input type="hidden" name="_csrf" value="<%=csrf%>" />
 
         <button type="submit" class="waves-effect waves-light btn row">
           Add show
@@ -64,6 +64,8 @@
           <input id="search" name="search" type="text" class="validate" />
           <label for="search">Search</label>
         </div>
+        <input type="hidden" name="_csrf" value="<%=csrf%>" />
+
         <button
           type="submit"
           class="btn-floating btn-large waves-effect waves-light"
@@ -76,10 +78,10 @@
       <h5>Showing result for <%= search %></h5>
       <% } %>
 
-      <ul class="row" style="columns: 3">
+      <ul class="row" id="list">
         <% for (let i = 0; i < shows.length ; i++) { %>
 
-        <div style="break-inside: avoid-column" class="row">
+        <div class="row list-item">
           <div class="col s12 m12">
             <div class="card">
               <div class="card-image">
@@ -100,5 +102,6 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="scripts/clickListen.js"></script>
   </body>
 </html>

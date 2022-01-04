@@ -1,0 +1,12 @@
+#list {
+  columns: 3;
+}
+
+.list-item {
+  break-inside: avoid-column;
+}
+
+#sign-out-btn {
+  margin-top: 50px;
+  margin-left: 50px;
+}

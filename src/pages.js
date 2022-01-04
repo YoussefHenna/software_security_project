@@ -1,4 +1,11 @@
-module.exports = function pages(app, db, jwt, transporter) {
+const {
+  validateEmail,
+  validateRegularText,
+  validateMongodbId,
+} = require("./textValidator");
+const { MongoClient, ObjectId } = require("mongodb");
+
+module.exports = function pages(app, db, jwt, transporter, csrfProtection) {
   app.get("/", function (req, res) {
     jwt.verify(
       req.cookies.token,
@@ -13,22 +20,26 @@ module.exports = function pages(app, db, jwt, transporter) {
     );
   });
 
-  app.get("/login", function (req, res) {
-    res.render("pages/login");
+  app.get("/login", csrfProtection, function (req, res) {
+    res.render("pages/login", { csrf: req.csrfToken() });
   });
 
-  app.get("/register", function (req, res) {
-    res.render("pages/register");
+  app.get("/register", csrfProtection, function (req, res) {
+    res.render("pages/register", { csrf: req.csrfToken() });
   });
 
-  app.get("/forgot_password", function (req, res) {
-    res.render("pages/forgot_password");
+  app.get("/forgot_password", csrfProtection, function (req, res) {
+    res.render("pages/forgot_password", { csrf: req.csrfToken() });
   });
 
-  app.get("/reset", async function (req, res) {
+  app.get("/reset", csrfProtection, async function (req, res) {
     const email = req.query.email;
     if (!email) {
       return res.status(400).send("Missing fields");
+    }
+
+    if (!validateEmail(email)) {
+      return res.status(400).send("Invalid email");
     }
 
     const existing = await db.collection("users").findOne({ email });
@@ -38,6 +49,7 @@ module.exports = function pages(app, db, jwt, transporter) {
     await generateAndSend2faCode(email);
     res.render("pages/reset", {
       email,
+      csrf: req.csrfToken(),
     });
   });
 
@@ -58,10 +70,14 @@ module.exports = function pages(app, db, jwt, transporter) {
     }, 1000 * 60 * 5);
   }
 
-  app.get("/home", async function (req, res) {
+  app.get("/home", csrfProtection, async function (req, res) {
     const search = req.query.search;
+
     let shows;
     if (search) {
+      if (!validateRegularText(search)) {
+        return res.status(400).send("Invalid search");
+      }
       db.collection("shows").createIndex({ name: "text" });
       shows = await db
         .collection("shows")
@@ -73,11 +89,15 @@ module.exports = function pages(app, db, jwt, transporter) {
     res.render("pages/home", {
       shows,
       search,
+      csrf: req.csrfToken(),
     });
   });
 
-  app.get("/blog", async function (req, res) {
+  app.get("/blog", csrfProtection, async function (req, res) {
     const id = req.query.id;
+    if (!validateMongodbId(id)) {
+      return res.status(400).send("Invalid show id");
+    }
     if (!id) {
       return res.status(400).send("Missing fields");
     }
@@ -87,6 +107,7 @@ module.exports = function pages(app, db, jwt, transporter) {
     }
     res.render("pages/blog", {
       show: result,
+      csrf: req.csrfToken(),
     });
   });
 };
